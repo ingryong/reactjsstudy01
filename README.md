@@ -39,7 +39,7 @@ export default App;
 ## useEffect
 
 - 리액트에서 공식적으로 지원하는 Hooks 중 하나
-- 기본적으로 첫 렌더링 시 한 번만 실행되며 두 번째 매개변수`[]`에 값을 넣으면 해당 값이 변경 될 때마다 실행된다.
+- 기본적으로 첫 렌더링 시 한 번만 실행되며 두 번째 매개변수`[]`에 값을 넣으면 첫 렌더때 실행 후 해당 값이 변경 될 때마다 실행된다.
 
 ```javascript
 import React, { useState, useEffect } from 'react';
@@ -57,7 +57,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log('count가 변경될 때마다 실행된다.');
+    console.log('첫 렌더링 시 실행되고, count가 변경될 때마다 실행된다.');
   }, [count]);
 
   return (
@@ -69,3 +69,9 @@ function App() {
 }
 export default App;
 ```
+
+---
+
+## cleanup Function
+
+- 자주 쓰이지는 않지만 필요할 때가 있다.

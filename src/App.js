@@ -1,32 +1,56 @@
-import styles from './App.module.css';
 import { useEffect, useState } from 'react';
 
 function App() {
-  const [counter, setCounter] = useState(0);
-  const [keyword, setKeyword] = useState('');
+  const [toDo, setToDo] = useState('');
+  const [toDos, setToDos] = useState([]);
 
-  const onClick = () => setCounter(current => current + 1);
-  const onChange = e => setKeyword(e.target.value);
+  const onChange = e => {
+    setToDo(e.target.value);
+  };
 
-  console.log('I run all the time');
+  const onSubmit = e => {
+    e.preventDefault();
+    if (toDo === '') {
+      return;
+    }
+    setToDos(current => [...current, toDo]);
+    setToDo('');
+  };
 
   useEffect(() => {
-    console.log('called a api');
-  }, []); // useEffect는 단 한번만 실행된다.
-
-  useEffect(() => {
-    console.log('keyword is :', keyword);
-  }, [keyword]); // 두 번째 파라미터[] 안에 값을 넣으면 해당 값이 변경될 때마다 실행해준다.
-
-  useEffect(() => {
-    console.log(counter);
-  }, [counter]);
+    console.log(toDos);
+  }, [toDos]);
 
   return (
     <div className="App">
-      <input type="text" placeholder="Search here..." onChange={onChange} value={keyword} />
-      <h1 className={styles.title}>{counter}</h1>
-      <button onClick={onClick}>click me</button>
+      <h1>My ToDos({toDos.length})</h1>
+      <form>
+        <input onChange={onChange} value={toDo} type="text" placeholder="Write Your to do..." />
+        <button onClick={onSubmit}>Add To Do</button>
+      </form>
+      <hr />
+      <table className="ToDos-Table">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>할 일</th>
+            <th>체 크</th>
+          </tr>
+        </thead>
+        <tbody>
+          {toDos.map((item, i) => {
+            return (
+              <tr>
+                <td>{i + 1}</td>
+                <td>{item}</td>
+                <td>
+                  <input type="checkbox" />
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
