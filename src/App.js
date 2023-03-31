@@ -1,56 +1,43 @@
 import { useEffect, useState } from 'react';
 
 function App() {
-  const [toDo, setToDo] = useState('');
-  const [toDos, setToDos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [movies, setMovies] = useState([]);
 
-  const onChange = e => {
-    setToDo(e.target.value);
-  };
+  const getMovies = async () => {
+    const response = await fetch(`https://yts.mx/api/v2/list_movies.json?minimum_rating=9&sort_by=year`);
 
-  const onSubmit = e => {
-    e.preventDefault();
-    if (toDo === '') {
-      return;
-    }
-    setToDos(current => [...current, toDo]);
-    setToDo('');
+    const json = await response.json();
+    setMovies(json.data.movies);
+    setLoading(false);
   };
 
   useEffect(() => {
-    console.log(toDos);
-  }, [toDos]);
+    getMovies();
+  }, []);
 
+  console.log(movies);
   return (
     <div className="App">
-      <h1>My ToDos({toDos.length})</h1>
-      <form>
-        <input onChange={onChange} value={toDo} type="text" placeholder="Write Your to do..." />
-        <button onClick={onSubmit}>Add To Do</button>
-      </form>
-      <hr />
-      <table className="ToDos-Table">
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>할 일</th>
-            <th>체 크</th>
-          </tr>
-        </thead>
-        <tbody>
-          {toDos.map((item, i) => {
-            return (
-              <tr>
-                <td>{i + 1}</td>
-                <td>{item}</td>
-                <td>
-                  <input type="checkbox" />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {loading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <div>
+          {movies.map(item => (
+            <div key={item.id}>
+              <img src={item.medium_cover_image} />
+              <h3>{item.title}</h3>
+              <p>{item.summary}</p>
+              <p>{item.date_uploaded}</p>
+              <p>
+                {item.genres.map(g => (
+                  <span key={g}> • {g} </span>
+                ))}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
