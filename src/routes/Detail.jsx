@@ -10,14 +10,14 @@ function Detail() {
       setData(json.data.movie);
     };
     getMovie();
-  }, []);
+  }, [id]);
 
   console.log(data);
 
   return (
     <>
       <div>
-        <Link to="/">돌아가기</Link>
+        <Link to={`${process.env.PUBLIC_URL}/`}>돌아가기</Link>
       </div>
       <h1>{data.title}</h1>
       <img src={data.large_cover_image} alt="large_cover_image" />

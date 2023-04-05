@@ -1,20 +1,23 @@
 import propTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import style from './MovieList.module.css';
 
-function MovieList({ id, medium_cover_image, title, summary, date_uploaded, genres }) {
+function MovieList({ id, medium_cover_image, title, summary, year, genres }) {
   return (
-    <div key={id}>
-      <img src={medium_cover_image} alt={title} />
-      <h3>
-        <Link to={`/movie/${id}`}>{title}</Link>
-      </h3>
-      <p>{summary}</p>
-      <p>{date_uploaded}</p>
-      <p>
-        {genres.map(g => (
-          <span key={g}> • {g} </span>
-        ))}
-      </p>
+    <div key={id} className={style.movie}>
+      <img src={medium_cover_image} alt={title} className={style.movie__img} />
+      <div>
+        <h3 className={style.movie__title}>
+          <Link to={`/movie/${id}`}>{title}</Link>
+        </h3>
+        <p className={style.movie__year}>{year}</p>
+        <p>{summary.length > 120 ? `${summary.slice(0, 120)}...` : summary}</p>
+        <ul className={style.movie__genres}>
+          {genres.map(g => (
+            <li key={g}>{g}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
